@@ -1,7 +1,7 @@
 <?php
 
 function calculateCashflow($startingSavings = 0, $savingPerYear = 0, $cashflowPerHouse = 0, $houseCount = 0, $numYears = 10, $cashDownPerHouse = 20000) {
-
+  setlocale(LC_MONETARY,"en_US");
   $currYear = 1;
   $currCash = $startingSavings;
   $annualRealEstateCashFlow = 0;
@@ -9,16 +9,14 @@ function calculateCashflow($startingSavings = 0, $savingPerYear = 0, $cashflowPe
     $annualRealEstateCashFlow = $cashflowPerHouse * $houseCount;
     $currCash = $currCash + $savingPerYear + $annualRealEstateCashFlow;
 
-    // $numHousesToBuy = round down to nearest integer => ($currCash / $cashDownPerHouse);
-    // $houseCount += numHousesToBuy;
-    // $
+    $numHousesToBuy = floor($currCash / $cashDownPerHouse);
     if($currCash > $cashDownPerHouse) {
-      $houseCount++;
-      $currCash -= $cashDownPerHouse;
+      $houseCount += $numHousesToBuy;
+      $currCash -= $cashDownPerHouse * $numHousesToBuy;
     }
-    echo "Cash at end of year $currYear: " . $currCash . "</br>"; 
-    echo "House Count at end of year $currYear: " . $houseCount . "</br>";
-    echo "Annual Real Estate Cash Flow at end of year $currYear: " . $annualRealEstateCashFlow . "</br></br>";
+    echo "Cash at end of year $currYear: <strong>" . money_format("%(.0n",$currCash) . "</strong></br>"; 
+    echo "House Count at end of year $currYear: <strong>" . $houseCount . "</strong></br>";
+    echo "Annual Real Estate Cash Flow at end of year $currYear: <strong>" . money_format("%(.0n",$annualRealEstateCashFlow) . "</strong></br></br>";
     $currYear++;
   }
 
